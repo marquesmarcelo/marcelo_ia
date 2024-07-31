@@ -6,21 +6,23 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/marquesmarcelo/marcelo_iapkg/httpclient"
+	"github.com/marquesmarcelo/marcelo_ia/pkg/httpclient"
 )
 
 type GmailWriter struct {
 	client *httpclient.HTTPClient
+	apiUrl string
 }
 
-func NewGmailWriter(apiKey string) *GmailWriter {
+func NewGmailWriter(client *httpclient.HTTPClient, apiUrl string) *GmailWriter {
 	return &GmailWriter{
-		client: httpclient.New(apiKey),
+		client: client,
+		apiUrl: apiUrl,
 	}
 }
 
 func (w *GmailWriter) WriteDraft(content string) error {
-	url := "https://gmail.googleapis.com/gmail/v1/users/me/drafts"
+	url := fmt.Sprintf("%s/users/me/drafts", w.apiUrl)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}

@@ -6,21 +6,23 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/marquesmarcelo/marcelo_iapkg/httpclient"
+	"github.com/marquesmarcelo/marcelo_ia/pkg/httpclient"
 )
 
 type GmailMarker struct {
 	client *httpclient.HTTPClient
+	apiUrl string
 }
 
-func NewGmailMarker(apiKey string) *GmailMarker {
+func NewGmailMarker(client *httpclient.HTTPClient, apiUrl string) *GmailMarker {
 	return &GmailMarker{
-		client: httpclient.New(apiKey),
+		client: client,
+		apiUrl: apiUrl,
 	}
 }
 
 func (m *GmailMarker) MarkMessageAsRead(messageID string) error {
-	url := fmt.Sprintf("https://gmail.googleapis.com/gmail/v1/users/me/messages/%s/modify", messageID)
+	url := fmt.Sprintf("%s/users/me/messages/%s/modify", m.apiUrl, messageID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}

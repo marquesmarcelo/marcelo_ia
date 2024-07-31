@@ -11,7 +11,6 @@
 *.dylib
 
 # Diretórios de pacotes Go
-/pkg/
 /vendor/
 
 # Diretório de cache do módulo Go

@@ -1,34 +1,40 @@
 package main
 
 import (
-    "fmt"
-    "github.com/marquesmarcelo/marcelo_ia/adapters/gmail"
-    "github.com/marquesmarcelo/marcelo_ia/adapters/outlook"
-    "github.com/marquesmarcelo/marcelo_ia/adapters/moodle"
-    "github.com/marquesmarcelo/marcelo_ia/adapters/whatsapp"
-    "github.com/marquesmarcelo/marcelo_ia/adapters/blackboard"
-    "github.com/marquesmarcelo/marcelo_ia/config"
-    "github.com/marquesmarcelo/marcelo_ia/usecases"
+	"fmt"
+
+	"github.com/marquesmarcelo/marcelo_ia/internal/config"
+	"github.com/marquesmarcelo/marcelo_ia/internal/usecases"
 )
 
 func main() {
-    cfg := config.LoadConfig()
+	cfg := config.LoadConfig()
+	app := config.Setup(cfg)
 
-    gmailReader := gmail.NewGmailReader(cfg.GmailAPIKey)
-    outlookReader := outlook.NewOutlookReader(cfg.OutlookClientID, cfg.OutlookSecret, cfg.OutlookTenantID)
-    moodleReader := moodle.NewMoodleReader(cfg.MoodleAPIKey)
-    whatsappReader := whatsapp.NewWhatsAppReader(cfg.WhatsAppAPIKey)
-    blackboardReader := blackboard.NewBlackboardReader(cfg.BlackboardAPIKey)
+	readers := []usecases.MessageReader{app.GmailReader, app.OutlookReader, app.MoodleReader, app.WhatsAppReader, app.BlackboardReader}
 
-    readers := []usecases.MessageReader{gmailReader, outlookReader, moodleReader, whatsappReader, blackboardReader}
+	for _, reader := range readers {
+		messages, err := usecases.ReadUnreadMessages(reader)
+		if err != nil {
+			fmt.Printf("Error reading messages: %v\n", err)
+			continue
+		}
+		fmt.Printf("Unread messages from %T: %v\n", reader, messages)
 
-    for _, reader := range readers {
-        messages, err := usecases.ReadUnreadMessages(reader)
-        if err != nil {
-            fmt.Printf("Error reading messages: %v\n", err)
-            continue
-        }
-        fmt.Printf("Unread messages from %T: %v\n", reader, messages)
+		for _, msg := range messages {
+			err := usecases.WriteDraft(app.GmailWriter, "This is a test draft message")
+			if err != nil {
+				fmt.Printf("Error writing draft: %v\n", err)
+				continue
+			}
+			fmt.Println("Draft written successfully.")
 
-        for _, msg := range messages {
-            whatsappWriter := whatsapp.NewWhatsAppWriter(cfg.WhatsApp
+			err = usecases.MarkMessageAsRead(app.GmailMarker, msg.ID)
+			if err != nil {
+				fmt.Printf("Error marking message as read: %v\n", err)
+			} else {
+				fmt.Println("Message marked as read successfully.")
+			}
+		}
+	}
+}
