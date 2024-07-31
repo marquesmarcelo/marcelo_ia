@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/marquesmarcelo/marcelo_ia/pkg/httpclient"
+	"github.com/marquesmarcelo/marcelo_ia/internal/httpclient"
 )
 
 type GmailMarker struct {

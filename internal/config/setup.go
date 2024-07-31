@@ -2,7 +2,7 @@ package config
 
 import (
 	"github.com/marquesmarcelo/marcelo_ia/internal/adapters/gmail"
-	"github.com/marquesmarcelo/marcelo_ia/pkg/httpclient"
+	"github.com/marquesmarcelo/marcelo_ia/internal/httpclient"
 )
 
 type Application struct {

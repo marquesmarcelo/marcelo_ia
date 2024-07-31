@@ -1,7 +1,7 @@
 package usecases
 
 import (
-	"github.com/marquesmarcelo/marcelo_ia/domain"
+	"github.com/marquesmarcelo/marcelo_ia/internal/domain"
 )
 
 type MessageReader interface {

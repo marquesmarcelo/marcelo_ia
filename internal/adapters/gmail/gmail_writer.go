@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/marquesmarcelo/marcelo_ia/pkg/httpclient"
+	"github.com/marquesmarcelo/marcelo_ia/internal/httpclient"
 )
 
 type GmailWriter struct {
@@ -42,6 +42,7 @@ func (w *GmailWriter) WriteDraft(content string) error {
 	if err != nil {
 		return err
 	}
+	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusCreated {
 		return fmt.Errorf("API error: %v", resp.Status)

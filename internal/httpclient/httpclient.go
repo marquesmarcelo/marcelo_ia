@@ -3,14 +3,14 @@ package httpclient
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"time"
 )
 
 type HTTPClient struct {
 	client *http.Client
-	apiKey string
+	APIKey string
 }
 
 func New(apiKey string) *HTTPClient {
@@ -18,7 +18,7 @@ func New(apiKey string) *HTTPClient {
 		client: &http.Client{
 			Timeout: time.Second * 10,
 		},
-		apiKey: apiKey,
+		APIKey: apiKey,
 	}
 }
 
@@ -28,7 +28,7 @@ func (c *HTTPClient) Get(url string, headers map[string]string) ([]byte, error) 
 		return nil, err
 	}
 
-	req.Header.Set("Authorization", "Bearer "+c.apiKey)
+	req.Header.Set("Authorization", "Bearer "+c.APIKey)
 	for key, value := range headers {
 		req.Header.Set(key, value)
 	}
@@ -39,10 +39,10 @@ func (c *HTTPClient) Get(url string, headers map[string]string) ([]byte, error) 
 	}
 	defer resp.Body.Close()
 
-	return ioutil.ReadAll(resp.Body)
+	return io.ReadAll(resp.Body)
 }
 
-func (c *HTTPClient) Post(url string, body interface{}, headers map[string]string) ([]byte, error) {
+func (c *HTTPClient) Post(url string, body interface{}, headers map[string]string) (*http.Response, error) {
 	jsonData, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
@@ -54,21 +54,15 @@ func (c *HTTPClient) Post(url string, body interface{}, headers map[string]strin
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+c.apiKey)
+	req.Header.Set("Authorization", "Bearer "+c.APIKey)
 	for key, value := range headers {
 		req.Header.Set(key, value)
 	}
 
-	resp, err := c.client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	return ioutil.ReadAll(resp.Body)
+	return c.client.Do(req)
 }
 
-func (c *HTTPClient) Patch(url string, body interface{}, headers map[string]string) ([]byte, error) {
+func (c *HTTPClient) Patch(url string, body interface{}, headers map[string]string) (*http.Response, error) {
 	jsonData, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
@@ -80,16 +74,10 @@ func (c *HTTPClient) Patch(url string, body interface{}, headers map[string]stri
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+c.apiKey)
+	req.Header.Set("Authorization", "Bearer "+c.APIKey)
 	for key, value := range headers {
 		req.Header.Set(key, value)
 	}
 
-	resp, err := c.client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	return ioutil.ReadAll(resp.Body)
+	return c.client.Do(req)
 }
