@@ -21,6 +21,7 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.2 // indirect
 	github.com/googleapis/gax-go/v2 v2.12.5 // indirect
+	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/microsoft/kiota-abstractions-go v1.6.1 // indirect
 	github.com/microsoft/kiota-authentication-azure-go v1.0.2 // indirect
 	github.com/microsoft/kiota-http-go v1.3.1 // indirect
