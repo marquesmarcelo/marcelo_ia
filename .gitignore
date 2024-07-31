@@ -1,0 +1,47 @@
+# Diretórios bin e build
+/bin/
+/build/
+
+# Arquivos temporários do sistema
+*.log
+*.out
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Diretórios de pacotes Go
+/pkg/
+/vendor/
+
+# Diretório de cache do módulo Go
+/go/pkg/mod/
+
+# Arquivos de cache do editor de código
+.idea/
+/.vscode/
+/*.swp
+*~
+
+# Arquivos de configuração do editor
+*.sublime-project
+*.sublime-workspace
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de configuração de contêineres
+docker-compose.override.yml
+
+# Arquivos de compilação
+*.a
+*.o
+
+# Arquivos de teste
+*.test
+
+# Credenciais e chaves
+*.env
+credentials.json
+token.json
